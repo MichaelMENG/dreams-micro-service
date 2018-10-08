@@ -11,6 +11,8 @@
 
     <modules>
         <module>message-thrift-service-api</module>
+        <module>user-thrift-service-api</module>
+        <module>user-thrift-service</module>
     </modules>
 
 </project>
