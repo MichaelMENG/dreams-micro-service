@@ -6,7 +6,11 @@
 
     <groupId>com.dreams</groupId>
     <artifactId>dreams-micro-service</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
+    <modules>
+        <module>message-thrift-service-api</module>
+    </modules>
 
 </project>
