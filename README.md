@@ -1,4 +1,4 @@
-# ~~~ dreams-micro-service 微服务 ~~~
+# dreams-micro-service 微服务
 
 # 用户服务
 - 用户登录
