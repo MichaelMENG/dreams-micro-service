@@ -1,28 +1,23 @@
 package com.dreams.user.controller;
 
 import com.dreams.thrift.user.UserInfo;
-import com.dreams.user.dto.UserDTO;
+import com.dreams.thrift.user.dto.UserDTO;
 import com.dreams.user.redis.RedisClient;
 import com.dreams.user.response.LoginResponse;
 import com.dreams.user.response.Response;
 import com.dreams.user.thrift.ServiceProvider;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.MessageDigest;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/user")
@@ -36,11 +31,10 @@ public class UserController {
     @Autowired
     private RedisClient redisClient;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
+    }
 
     @PostMapping("/login")
     @ResponseBody
@@ -65,21 +59,88 @@ public class UserController {
         String token = genToken();
 
         // 3. 缓存用户
-        stringRedisTemplate.opsForValue().set(
-                "700306",
-                "孟志军",
-                3600,
-                TimeUnit.SECONDS);
-
-        redisTemplate.opsForValue().set(
-                token,
-                userInfo,
-                3600,
-                TimeUnit.SECONDS);
-
-        //redisClient.set(token, toDTO(userInfo));
+        redisClient.set(token, toDTO(userInfo));
 
         return new LoginResponse(token);
+    }
+
+    @PostMapping("/sendVerifyCode")
+    @ResponseBody
+    public Response sendVerifyCode(@RequestParam(value = "mobile", required = false) String mobile,
+                                   @RequestParam(value = "email", required = false) String email) {
+
+        // 生成消息内容
+        String message = "Verify code is:";
+        // 生成6位随机码
+        String code = randomCode("0123456789", 6);
+        try {
+
+            boolean result = false;
+            if(StringUtils.isNotBlank(mobile)) {
+                result = serviceProvider.getMessageService().sendMobileMessage(mobile, message+code);
+                redisClient.set(mobile, code);
+            } else if(StringUtils.isNotBlank(email)) {
+                result = serviceProvider.getMessageService().sendEmailMessage(email, message+code);
+                redisClient.set(email, code);
+            } else {
+                return Response.MOBILE_OR_EMAIL_REQUIRED;
+            }
+
+            if(!result) {
+                return Response.SEND_VERIFY_CODE_FAILED;
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+            return Response.exception(e);
+        }
+
+        return Response.SUCCESS;
+    }
+
+    @PostMapping("/register")
+    @ResponseBody
+    public Response register(@RequestParam("username") String username,
+                             @RequestParam("password") String password,
+                             @RequestParam(value = "mobile", required = false) String mobile,
+                             @RequestParam(value = "email", required = false) String email,
+                             @RequestParam("verifyCode") String verifyCode) {
+        if (StringUtils.isBlank(mobile) && StringUtils.isBlank(email)) {
+            return Response.MOBILE_OR_EMAIL_REQUIRED;
+        }
+
+        if (StringUtils.isNotBlank(mobile)) {
+            String redisCode = redisClient.get(mobile);
+            if (!verifyCode.equals(redisCode)) {
+                return Response.VERIFY_CODE_INVALID;
+            }
+        } else {
+            String redisCode = redisClient.get(email);
+            if (!verifyCode.equals(redisCode)) {
+                return Response.VERIFY_CODE_INVALID;
+            }
+        }
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername(username);
+        userInfo.setPassword(md5(password));
+        userInfo.setMobile(mobile);
+        userInfo.setEmail(email);
+
+        try {
+            serviceProvider.getUserService().registerUser(userInfo);
+        } catch (TException e) {
+            e.printStackTrace();
+            return Response.exception(e);
+        }
+
+        return Response.SUCCESS;
+    }
+
+    @PostMapping("/authentication")
+    @ResponseBody
+    public UserDTO authentication(@RequestHeader("token") String token) {
+        // redis token里存的就是UserDTO, 有就返回用户信息，没有就返回null
+        return redisClient.get(token);
     }
 
     private UserDTO toDTO(UserInfo userInfo) {

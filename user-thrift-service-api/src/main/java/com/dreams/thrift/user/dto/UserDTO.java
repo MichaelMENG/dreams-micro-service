@@ -1,4 +1,4 @@
-package com.dreams.user.dto;
+package com.dreams.thrift.user.dto;
 
 import java.io.Serializable;
 

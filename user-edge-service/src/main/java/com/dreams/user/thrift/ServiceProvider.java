@@ -1,6 +1,8 @@
 package com.dreams.user.thrift;
 
+import com.dreams.thrift.message.MessageService;
 import com.dreams.thrift.user.UserService;
+import org.apache.thrift.TServiceClient;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -13,10 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServiceProvider {
 
-
     @Value("${thrift.user.ip}")
     private String serverIp;
-
     @Value("${thrift.user.port}")
     private int serverPort;
 
@@ -31,21 +31,35 @@ public class ServiceProvider {
     }
 
     public UserService.Client getUserService() {
-        return getUserService(serverIp, serverPort);
+
+        return getService(serverIp, serverPort, ServiceType.USER);
     }
 
-    public UserService.Client getUserService(String serverIp, int serverPort) {
-        TSocket socket = new TSocket(serverIp, serverPort, 3000);
+    public MessageService.Client getMessageService() {
+        return getService(messageServerIp, messageServerPort, ServiceType.MESSAGE);
+    }
+
+    public <T> T getService(String ip, int port, ServiceType serviceType) {
+        TSocket socket = new TSocket(ip, port, 3000);
         TTransport transport = new TFramedTransport(socket);
         try {
             transport.open();
         } catch (TTransportException e) {
             e.printStackTrace();
+            return null;
         }
         TProtocol protocol = new TBinaryProtocol(transport);
 
-        UserService.Client client = new UserService.Client(protocol);
+        TServiceClient result = null;
+        switch (serviceType) {
+            case USER:
+                result = new UserService.Client(protocol);
+                break;
+            case MESSAGE:
+                result = new MessageService.Client(protocol);
+                break;
+        }
 
-        return client;
+        return (T) result;
     }
 }

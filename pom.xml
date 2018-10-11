@@ -15,7 +15,7 @@
         <java.version>1.8</java.version>
         <dreams.spring.cloud.version>1.0</dreams.spring.cloud.version>
         <!-- Spring Boot 版本 -->
-        <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
         <!-- Spring Cloud 版本 -->
         <spring-cloud.version>Finchley.SR1</spring-cloud.version>
     </properties>
@@ -80,6 +80,7 @@
         <module>user-thrift-service-api</module>
         <module>user-thrift-service</module>
         <module>user-edge-service</module>
+        <module>user-edge-service-client</module>
     </modules>
 
 </project>
