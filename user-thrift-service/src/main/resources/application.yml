@@ -7,4 +7,6 @@ spring:
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 server:
-  port: 8000
+  port: 9000
+
+# TODO: 配置DUBBO

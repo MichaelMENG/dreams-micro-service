@@ -1,3 +1,4 @@
+# 数据库 db_user
 CREATE TABLE pe_user (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   username VARCHAR(32) NOT NULL COMMENT '用户名',

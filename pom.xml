@@ -81,6 +81,8 @@
         <module>user-thrift-service</module>
         <module>user-edge-service</module>
         <module>user-edge-service-client</module>
+        <module>course-dubbo-service-api</module>
+        <module>course-dubbo-service</module>
     </modules>
 
 </project>
