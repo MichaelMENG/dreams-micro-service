@@ -6,8 +6,63 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
+server:
+  port: 9000
+
+# Service version
+course:
+  service:
+    version: 1.0.0
+# Dubbo Config properties
+dubbo:
+  ## ApplicationConfig Bean
+  application:
+    id: course-dubbo-service
+    name: course-dubbo-service
+#    qos-port: 22222
+#    qos-enable: true
+  ## RegistryConfig Bean
+  registry:
+    protocol: zookeeper
+    address: 192.168.1.98:2181
+    id: course-dubbo-service
+    timeout: 30000
+  ## ProtocolConfig Bean
+  protocol:
+    id: zookeeper
+    name: dubbo
+    port: 20880
+    status: server
+  scan:
+    base-packages: com.dreams.course.service
+
+# Enables Dubbo All Endpoints
+management:
+  endpoint:
+    dubbo:
+      enabled: true
+    dubbo-shutdown:
+      enabled: true
+    dubbo-configs:
+      enabled: true
+    dubbo-services:
+      enabled: true
+    dubbo-references:
+      enabled: true
+    dubbo-properties:
+      enabled: true
+  # Dubbo Health
+  health:
+    dubbo:
+      status:
+        ## StatusChecker Name defaults (default : "memory", "load" )
+        default: memory
+        ## StatusChecker Name extras (default : empty )
+        extras: load,threadpool
 
 thrift:
   user:
     ip: localhost
     port: 8001
+
+

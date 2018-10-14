@@ -1,4 +1,4 @@
-package com.dreams.course.service;
+package com.dreams.course.provider;
 
 import com.dreams.thrift.user.UserService;
 import org.apache.thrift.TServiceClient;

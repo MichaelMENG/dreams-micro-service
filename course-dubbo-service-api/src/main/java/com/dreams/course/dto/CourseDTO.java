@@ -2,7 +2,9 @@ package com.dreams.course.dto;
 
 import com.dreams.thrift.user.dto.TeacherDTO;
 
-public class CourseDTO {
+import java.io.Serializable;
+
+public class CourseDTO implements Serializable {
 
     private int id;
 
@@ -10,7 +12,17 @@ public class CourseDTO {
 
     private String description;
 
-    private TeacherDTO teacherDTO;
+    private TeacherDTO teacher;
+
+    public CourseDTO() {
+    }
+
+    public CourseDTO(int id, String title, String description, TeacherDTO teacher) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.teacher = teacher;
+    }
 
     public int getId() {
         return id;
@@ -36,11 +48,21 @@ public class CourseDTO {
         this.description = description;
     }
 
-    public TeacherDTO getTeacherDTO() {
-        return teacherDTO;
+    public TeacherDTO getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherDTO(TeacherDTO teacherDTO) {
-        this.teacherDTO = teacherDTO;
+    public void setTeacher(TeacherDTO teacher) {
+        this.teacher = teacher;
+    }
+
+    @Override
+    public String toString() {
+        return "CourseDTO{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", teacher=" + teacher +
+                '}';
     }
 }

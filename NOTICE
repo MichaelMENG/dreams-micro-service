@@ -1,0 +1,9 @@
+# 端口说明
+
+- user-thrift-service               8000
+- user-edge-service                 8001
+
+- course-dubbo-service              9000
+- course-edge-service               9001
+
+- message-thrift-python-service     9090

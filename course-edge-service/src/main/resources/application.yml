@@ -1,0 +1,57 @@
+# Spring boot application
+spring:
+  application:
+    name: course-edge-service
+
+# Course service version
+course:
+  service:
+    version: 1.0.0
+
+#endpoint:
+#  dubbo:
+#    enabled: true
+
+# Dubbo Config properties
+dubbo:
+  ## ApplicationConfig Bean
+  application:
+    id: course-edge-service
+    name: course-edge-service
+  protocol:
+    id: dubbo
+    name: dubbo
+    port: 20881
+  registry:
+    id: course-dubbo-service
+    address: zookeeper://192.168.1.98:2181
+    protocol: zookeeper
+    timeout: 30000
+# Enables Dubbo All Endpoints
+#management:
+#  endpoint:
+#    dubbo:
+#      enabled: true
+#    dubbo-shutdown:
+#      enabled: true
+#    dubbo-configs:
+#      enabled: true
+#    dubbo-services:
+#      enabled: true
+#    dubbo-references:
+#      enabled: true
+#    dubbo-properties:
+#      enabled: true
+#    health:
+#      dubbo:
+#        status:
+#          defaults: memory
+#    # Exposes all web endpoints
+#    web:
+#      exposure:
+#        include: *
+server:
+  port: 9001
+management:
+  server:
+    port: 9002
