@@ -29,40 +29,40 @@ dubbo:
     timeout: 30000
   ## ProtocolConfig Bean
   protocol:
-    id: zookeeper
+    id: dubbo
     name: dubbo
-    port: 20880
+    port: 12345
     status: server
   scan:
     base-packages: com.dreams.course.service
 
 # Enables Dubbo All Endpoints
-management:
-  endpoint:
-    dubbo:
-      enabled: true
-    dubbo-shutdown:
-      enabled: true
-    dubbo-configs:
-      enabled: true
-    dubbo-services:
-      enabled: true
-    dubbo-references:
-      enabled: true
-    dubbo-properties:
-      enabled: true
-  # Dubbo Health
-  health:
-    dubbo:
-      status:
-        ## StatusChecker Name defaults (default : "memory", "load" )
-        default: memory
-        ## StatusChecker Name extras (default : empty )
-        extras: load,threadpool
+#management:
+#  endpoint:
+#    dubbo:
+#      enabled: true
+#    dubbo-shutdown:
+#      enabled: true
+#    dubbo-configs:
+#      enabled: true
+#    dubbo-services:
+#      enabled: true
+#    dubbo-references:
+#      enabled: true
+#    dubbo-properties:
+#      enabled: true
+#  # Dubbo Health
+#  health:
+#    dubbo:
+#      status:
+#        ## StatusChecker Name defaults (default : "memory", "load" )
+#        default: memory
+#        ## StatusChecker Name extras (default : empty )
+#        extras: load,threadpool
 
 thrift:
   user:
     ip: localhost
-    port: 8001
+    port: 8000
 
 

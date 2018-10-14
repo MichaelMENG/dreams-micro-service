@@ -21,12 +21,15 @@ dubbo:
   protocol:
     id: dubbo
     name: dubbo
-    port: 20881
+    port: 12345
+    status: server
   registry:
-    id: course-dubbo-service
-    address: zookeeper://192.168.1.98:2181
+    id: course-edge-service
+    address: 192.168.1.98:2181
     protocol: zookeeper
     timeout: 30000
+  scan:
+      base-packages: com.dreams.course.service
 # Enables Dubbo All Endpoints
 #management:
 #  endpoint:
@@ -46,12 +49,14 @@ dubbo:
 #      dubbo:
 #        status:
 #          defaults: memory
-#    # Exposes all web endpoints
+#  # Exposes all web endpoints
+#  endpoints:
 #    web:
 #      exposure:
 #        include: *
+
 server:
   port: 9001
-management:
-  server:
-    port: 9002
+#management:
+#  server:
+#    port: 9002

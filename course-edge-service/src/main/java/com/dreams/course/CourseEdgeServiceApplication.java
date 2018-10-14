@@ -2,7 +2,6 @@ package com.dreams.course;
 
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import com.dreams.course.filter.CourseFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -11,7 +10,8 @@ import org.springframework.context.annotation.Bean;
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.dreams.course")
+@EnableDubbo
 public class CourseEdgeServiceApplication {
 
     public static void main(String[] args) {

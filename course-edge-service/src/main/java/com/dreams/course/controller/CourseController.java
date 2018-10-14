@@ -16,9 +16,10 @@ import java.util.List;
 @RequestMapping("/course")
 public class CourseController {
 
-    @Reference(version = "${course.service.version}",
-            application = "${dubbo.application.id}",
-            url = "${dubbo.registry.address}")
+    @Reference(version = "${course.service.version}"
+//            application = "${dubbo.application.id}",
+//            url = "${dubbo.registry.address}"
+    )
     private ICourseService courseService;
 
     @GetMapping("/courseList")
