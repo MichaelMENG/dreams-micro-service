@@ -1,0 +1,5 @@
+FROM hub.dreams.com/base-resources/python:3.6.6
+
+MAINTAINER dreamstep36 dreamstep36@163.com
+
+RUN pip install thrift

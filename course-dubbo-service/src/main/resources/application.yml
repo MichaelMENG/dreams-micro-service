@@ -2,7 +2,7 @@ spring:
   application:
     name: course-dubbo-service
   datasource:
-    url: jdbc:mysql://192.168.1.98:3306/db_course?characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://${mysql.address}:3306/db_course?characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
@@ -24,7 +24,7 @@ dubbo:
   ## RegistryConfig Bean
   registry:
     protocol: zookeeper
-    address: 192.168.1.98:2181
+    address: ${zookeeper.address}:2181
     id: course-dubbo-service
     timeout: 30000
   ## ProtocolConfig Bean
@@ -62,7 +62,7 @@ dubbo:
 
 thrift:
   user:
-    ip: localhost
+    ip: user-thrift-service
     port: 8000
 
 

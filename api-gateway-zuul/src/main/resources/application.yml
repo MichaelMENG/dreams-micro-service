@@ -4,7 +4,7 @@ zuul:
   routes:
     user:
       path: /user/**
-      url: http://localhost:8001/user/
+      url: http://user-edge-servie:8001/user/
     course:
       path: /course/**
-      url: http://localhost:9001/course/
+      url: http://course-edge-service:9001/course/
