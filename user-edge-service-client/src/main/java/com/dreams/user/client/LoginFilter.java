@@ -65,7 +65,7 @@ public abstract class LoginFilter implements Filter {
             }
         }
         if (userDTO == null) {
-            response.sendRedirect("http://localhost:8001/user/login");
+            response.sendRedirect("http://user-edge-service:8001/user/login");
             return;
         }
 
@@ -86,7 +86,7 @@ public abstract class LoginFilter implements Filter {
 
 
     private UserDTO requestUserInfo(String token) {
-        String url = "http://localhost:8001/user/authentication";
+        String url = "http://user-edge-service:8001/user/authentication";
 
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);

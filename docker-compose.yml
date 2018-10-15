@@ -1,0 +1,56 @@
+version: '3'
+
+#networks:
+#  default:
+#    external:
+#      name: dreams-network
+
+services:
+  message-thrift-python-service:
+    image: hub.dreams.com/dreams-micro-service/message-thrift-python-service:1.0-SNAPSHOT
+    ports:
+      - 9090:9090
+
+  user-thrift-service:
+    image: hub.dreams.com/dreams-micro-service/user-thrift-service:1.0-SNAPSHOT
+    command:
+    - "--mysql.address=192.168.1.98"
+    ports:
+      - 8000:8000
+
+  user-edge-service:
+    image: hub.dreams.com/dreams-micro-service/user-edge-service:1.0-SNAPSHOT
+    links:
+      - user-thrift-service
+      - message-thrift-python-service
+    command:
+    - "--redis.address=192.168.1.98"
+    ports:
+      - 8001:8001
+
+  course-dubbo-service:
+    image: hub.dreams.com/dreams-micro-service/course-dubbo-service:1.0-SNAPSHOT
+    links:
+      - user-thrift-service
+    command:
+    - "--mysql.address=192.168.1.98"
+    - "--zookeeper.address=192.168.1.98"
+    ports:
+      - 9000:9000
+
+  course-edge-service:
+    image: hub.dreams.com/dreams-micro-service/course-edge-service:1.0-SNAPSHOT
+    links:
+      - user-edge-service
+    command:
+    - "--zookeeper.address=192.168.1.98"
+    ports:
+      - 9001:9001
+
+  api-gateway-zuul:
+    image: hub.dreams.com/dreams-micro-service/api-gateway-zuul:1.0-SNAPSHOT
+    links:
+      - user-edge-service
+      - course-edge-service
+    ports:
+      - 8080:8080
