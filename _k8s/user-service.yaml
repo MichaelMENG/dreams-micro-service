@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: user-service
+  name: user-service
+  namespace: default
+spec:
+  ports:
+  - name: user-edge-service-port
+    port: 8001
+    protocol: TCP
+    targetPort: 8001
+  - name: user-thrift-service-port
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app: user-service
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: user-service-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user-thrift-service
+        image: hub.dreams.com/dreams-micro-service/user-thrift-service:1.1-SNAPSHOT
+        ports:
+        - containerPort: 8000
+      - name: user-edge-service
+        image: hub.dreams.com/dreams-micro-service/user-edge-service:1.0-SNAPSHOT
+        ports:
+        - containerPort: 8001
+

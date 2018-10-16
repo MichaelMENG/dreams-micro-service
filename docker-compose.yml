@@ -1,56 +1,85 @@
-version: '3'
+version: '3.6'
 
-#networks:
-#  default:
-#    external:
-#      name: dreams-network
+networks:
+  default:
+    external:
+      name: dreams-network
 
 services:
+
   message-thrift-python-service:
     image: hub.dreams.com/dreams-micro-service/message-thrift-python-service:1.0-SNAPSHOT
-    ports:
-      - 9090:9090
+    container_name: message-thrift-python-service
 
   user-thrift-service:
     image: hub.dreams.com/dreams-micro-service/user-thrift-service:1.0-SNAPSHOT
+    container_name: user-thrift-service
     command:
-    - "--mysql.address=192.168.1.98"
-    ports:
-      - 8000:8000
+      - "--mysql.address=172.18.0.2"
 
   user-edge-service:
     image: hub.dreams.com/dreams-micro-service/user-edge-service:1.0-SNAPSHOT
+    hostname: user-edge-service
+    container_name: user-edge-service
     links:
       - user-thrift-service
       - message-thrift-python-service
     command:
-    - "--redis.address=192.168.1.98"
-    ports:
-      - 8001:8001
+      - "--redis.address=172.18.0.3"
 
   course-dubbo-service:
     image: hub.dreams.com/dreams-micro-service/course-dubbo-service:1.0-SNAPSHOT
+    container_name: course-dubbo-service
     links:
       - user-thrift-service
+
     command:
-    - "--mysql.address=192.168.1.98"
-    - "--zookeeper.address=192.168.1.98"
-    ports:
-      - 9000:9000
+      - "--mysql.address=172.18.0.2"
+      - "--dubbo.registry.address=172.18.0.4:2181"
 
   course-edge-service:
     image: hub.dreams.com/dreams-micro-service/course-edge-service:1.0-SNAPSHOT
+    hostname: course-edge-service
+    container_name: course-edge-service
     links:
       - user-edge-service
     command:
-    - "--zookeeper.address=192.168.1.98"
-    ports:
-      - 9001:9001
+      - "--dubbo.registry.address=172.18.0.4:2181"
 
   api-gateway-zuul:
     image: hub.dreams.com/dreams-micro-service/api-gateway-zuul:1.0-SNAPSHOT
+    container_name: api-gateway-zuul
     links:
+      - user-edge-service
+      - course-edge-service
+    depends_on:
       - user-edge-service
       - course-edge-service
     ports:
       - 8080:8080
+
+# 设置 mysql, redis, zookeeper
+#
+#  mysql:
+#    image: mysql:latest
+#    container_name: mysql
+#    volumes:
+#      - /Users/dreamstep36/docker/mysql/conf:/etc/mysql/conf.d
+#      - /Users/dreamstep36/docker/mysql/data:/var/lib/mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD: 123456
+#    ports:
+#      - 3306:3306
+#  redis:
+#    image: redis:latest
+#    container_name: redis
+#    volumes:
+#      - /Users/dreamstep36/docker/redis/data:/data
+#    ports:
+#      - 16379:6379
+#
+#  zookeeper:
+#    image: zookeeper:latest
+#    container_name: zookeeper
+#    ports:
+#      - 2181:2181

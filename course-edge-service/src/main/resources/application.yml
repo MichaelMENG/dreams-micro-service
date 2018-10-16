@@ -21,11 +21,11 @@ dubbo:
   protocol:
     id: dubbo
     name: dubbo
-    port: 12345
+    port: 20880
     status: server
   registry:
     id: course-edge-service
-    address: ${zookeeper.address}:2181
+    address: 192.168.1.98:2181
     protocol: zookeeper
     timeout: 30000
   scan:
@@ -57,6 +57,8 @@ dubbo:
 
 server:
   port: 9001
-#management:
-#  server:
-#    port: 9002
+
+user:
+  edge:
+    service:
+      addr: user-service:8001

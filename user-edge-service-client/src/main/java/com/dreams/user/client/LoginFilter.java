@@ -65,7 +65,7 @@ public abstract class LoginFilter implements Filter {
             }
         }
         if (userDTO == null) {
-            response.sendRedirect("http://user-edge-service:8001/user/login");
+            response.sendRedirect("http://www.dreamspace.com/user/login");
             return;
         }
 
@@ -84,9 +84,10 @@ public abstract class LoginFilter implements Filter {
      */
     protected abstract void login(HttpServletRequest request, HttpServletResponse response, UserDTO userDTO);
 
+    protected abstract String userEdgeServiceAddr();
 
     private UserDTO requestUserInfo(String token) {
-        String url = "http://user-edge-service:8001/user/authentication";
+        String url = "http://"+userEdgeServiceAddr()+"/user/authentication";
 
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);

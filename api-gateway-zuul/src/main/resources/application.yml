@@ -1,10 +1,18 @@
+spring:
+  application:
+    name: api-gateway-zuul
+
 server:
   port: 8080
+
 zuul:
   routes:
     user:
       path: /user/**
-      url: http://user-thrift-servie:8000/user/
+      url: http://user-service:8001/user/
     course:
       path: /course/**
-      url: http://course-dubbo-service:9000/course/
+      url: http://course-service:9001/course/
+  sensitive-headers:
+
+

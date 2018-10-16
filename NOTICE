@@ -7,3 +7,17 @@
 - course-edge-service               9001
 
 - message-thrift-python-service     9090
+
+# Ip - dreams-network
+
+dreamspace-mysql        172.18.0.2
+dreamspace-redis        172.18.0.3
+dreamspace-zookeeper    172.18.0.4
+
+K8s:
+
+1. 在k8s上部署时，dns, 也就是名称，都应该改为service的名称，如果一个service有多个pod,
+找到提供服务的相应端口即可。
+
+
+

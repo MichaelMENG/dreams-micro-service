@@ -2,7 +2,7 @@ spring:
   application:
     name: user-edge-service
   redis:
-    host: ${redis.address}
+    host: 192.168.1.98
     port: 6379
     # 连接超时时间（毫秒）
     timeout: 10000ms
@@ -23,8 +23,8 @@ server:
 
 thrift:
   user:
-    ip: user-thrift-service
+    ip: user-service
     port: 8000
   message:
-    ip: message-thrift-python-service
+    ip: message-service
     port: 9090
