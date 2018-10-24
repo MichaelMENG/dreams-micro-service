@@ -12,6 +12,8 @@ docker build -t ${IMAGE_NAME} .
 
 cd -
 
+docker login --username=michael --password=passw0RD hub.dreams.com
+
 docker push ${IMAGE_NAME}
 
 echo "${IMAGE_NAME}" > IMAGE_NAME
